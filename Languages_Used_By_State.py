@@ -7,6 +7,7 @@ Created on Mon Mar 11 21:27:58 2019
 
 from github import Github
 import time
+import pickle
 
 #Reads access token from a file
 f = open("access_token.txt", "r")
@@ -28,14 +29,121 @@ def maximum_repos(location):
     repo_count = 1        
     while(users.totalCount > 0):
         time.sleep(6)
-        print("Greater than {} repos & users {}".format(repo_count, users.totalCount))
+        print("Location: {} Greater than {} repos & users {}".format(location, repo_count, users.totalCount))
         repo_count += 50
         users = client.search_users(query= 'repos:>{} location:{}'.format(repo_count, location))
     return repo_count
     
-maximum_repo_serach_criteria  = {}
 
-print("maximum repo", maximum_repos('mo'))
+
+#Dictionary: Names of US states with abbreviations 
+us_state_abbrev = {
+    'Alabama': 'AL',
+    'Alaska': 'AK',         
+    'Arizona': 'AZ',
+    'Arkansas': 'AR',
+    'California': 'CA',
+    'Colorado': 'CO',
+    'Connecticut': 'CT',
+    'Delaware': 'DE',
+    'Florida': 'FL',
+    'Georgia': 'GA',
+    'Hawaii': 'HI',
+    'Idaho': 'ID',
+    'Illinois': 'IL',
+    'Indiana': 'IN',
+    'Iowa': 'IA',
+    'Kansas': 'KS',
+    'Kentucky': 'KY',
+    'Louisiana': 'LA',
+    'Maine': 'ME',
+    'Maryland': 'MD',
+    'Massachusetts': 'MA',
+    'Michigan': 'MI',
+    'Minnesota': 'MN',
+    'Mississippi': 'MS',
+    'Missouri': 'MO',
+    'Montana': 'MT',
+    'Nebraska': 'NE',
+    'Nevada': 'NV',
+    'New Hampshire': 'NH',
+    'New Jersey': 'NJ',
+    'New Mexico': 'NM',
+    'New York': 'NY',
+    'North Carolina': 'NC',
+    'North Dakota': 'ND',
+    'Ohio': 'OH',
+    'Oklahoma': 'OK',
+    'Oregon': 'OR',
+    'Pennsylvania': 'PA',
+    'Rhode Island': 'RI',
+    'South Carolina': 'SC',
+    'South Dakota': 'SD',
+    'Tennessee': 'TN',
+    'Texas': 'TX',
+    'Utah': 'UT',
+    'Vermont': 'VT',
+    'Virginia': 'VA',
+    'Washington': 'WA',
+    'West Virginia': 'WV',
+    'Wisconsin': 'WI',
+    'Wyoming': 'WY',
+}
+
+
+"""
+Dictionary: To save the maximum number repos of a user for a specific location 
+Dictionary : Key= location, values= maximum_repos
+Locations have both full state name as well ass abbreviation because "why Github?"
+Search by full state name and abbrev give different results
+
+"""
+
+
+'''
+maximum_repo_state  = {}
+
+
+for key, value in us_state_abbrev.items():
+    maximum_repo_state[key] = maximum_repos(key)
+    maximum_repo_state[value] = maximum_repos(value)
+    
+
+
+print(maximum_repo_state)
+
+
+#pickleing the maximum_repo_serach_criteria dictionary 
+with open('maximum_repo_state.pkl', 'wb') as f:
+    pickle.dump(maximum_repo_state, f)
+'''
+
+
+
+#Reads the maximum_repo_state pickle
+with open('maximum_repo_state.pkl', 'rb') as f:
+    maximum_repo_state  = pickle.load(f)
+
+print(maximum_repo_state)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -131,5 +239,11 @@ except Exception as e:
      print(usa_users)
      print("List length", len(usa_users))
      print(str(e))
+     
+     
+     
+     
+     
+
 '''
 

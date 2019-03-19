@@ -22,6 +22,7 @@ client = Github(access_token)
 Goal: finds maximum repos a user has for a specific location.
 Functions takes location parameter and finds the maximum number of repositories
 a user of that location has. 
+return: count of maximum repo
 
 """
 
@@ -42,6 +43,7 @@ def maximum_repos(location):
 Goal: function that gets all the unique user for a specific state
 Function takes users_set and users as parameter and goes thorugh different 
 pages of users paginated list and adds unique named user to the user_set set
+return: user_set
     
 """
 
@@ -160,53 +162,77 @@ with open('maximum_repo_state.pkl', 'wb') as f:
 with open('maximum_repo_state.pkl', 'rb') as f:
     maximum_repo_state  = pickle.load(f)
 
-print(maximum_repo_state)
 
 
-print("--------------------------------------------------------------------------")
+#Gets users of all locations from the maximum_repo_state
+
+
+#Writes the header of the csv file which stores the location, all the named users, number of users
+with open('github_users_by_state.csv', 'a', newline='') as csvFile:
+    writer = csv.writer(csvFile)
+    writer.writerow(["Location", "Users", "Number of users"])
+
+csvFile.close()
 
 
 
-#Gets all the Missouri users and saves in mo_users set
-users_set= set()
-repos = 1
-state = next(iter(maximum_repo_state))
-users =  client.search_users(query= 'repos:{} location:{}'.format(repos, state ))
-print("State {} & repos: {} & number of users {}".format(state, repos, users.totalCount))
+"""
+Goes thorugh all the items in the maximum_repo_state dictionary.
+Uses key as a location and value as the maximum repo to iterate through.
+It searches users with specific repos (which increases by 1, and goes until maximum repo) and for a specific location
+It uses get_user_by_location to get uniques users for that location and specific repo number, and returns user_set
+Eventually, appends the location, users, number of users into the csv.
 
-while(repos <= maximum_repo_state.get(state) ):
-    users_set = get_user_by_location(users_set, users)
-    print("length of users set", len(users_set))
-    print("----------------------next--------------------------------")
-    repos += 1
+"""
+
+
+for key, value in maximum_repo_state.items():
+    print("key: {} & value: {}".format(key, value))
+    users_set= set()
+    repos = 1
+    state = key
     users =  client.search_users(query= 'repos:{} location:{}'.format(repos, state ))
     print("State {} & repos: {} & number of users {}".format(state, repos, users.totalCount))
 
+    while(repos <= value ):
+        users_set = get_user_by_location(users_set, users)
+        print("length of users set", len(users_set))
+        print("----------------------next--------------------------------")
+        repos += 1
+        users =  client.search_users(query= 'repos:{} location:{}'.format(repos, state ))
+        print("State {} & repos: {} & number of users {}".format(state, repos, users.totalCount))
     
-
-print(users_set)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    print(users_set)
+    with open('github_users_by_state.csv', 'a', newline='') as csvFile:
+        writer = csv.writer(csvFile)
+        writer.writerow([key, users_set, len(users_set)])
+    csvFile.close()
 
 
 
     
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 ''' 
 mo_users= set()
 mo = client.search_users(query= 'repos:>1 location:MO')

@@ -166,10 +166,13 @@ with open('pickles/maximum_repo_state.pkl', 'wb') as f:
 
 
 #Reads the maximum_repo_state pickle
-with open('pickles/old_maximum_repo_state_with_state_abbrev.pkl', 'rb') as f:
+with open('pickles/maximum_repo_state.pkl', 'rb') as f:
     maximum_repo_state  = pickle.load(f)
 
 print(maximum_repo_state)
+print(len(maximum_repo_state))
+
+
 
 #maximum_repo_state = {'Florida': 901, 'FL': 751, 'Georgia': 501, 'GA': 551, 'Hawaii': 201, 'HI': 301, 'Idaho': 401, 'ID': 251, 'Illinois': 501, 'IL': 1551, 'Indiana': 251, 'IN': 33601, 'Iowa': 451, 'IA': 501, 'Kansas': 401, 'KS': 1201, 'Kentucky': 301, 'KY': 401, 'Louisiana': 1851, 'LA': 20301, 'Maine': 551, 'ME': 251, 'Maryland': 501, 'MD': 1101, 'Massachusetts': 1151, 'MA': 1801, 'Michigan': 551, 'MI': 3951, 'Minnesota': 1001, 'MN': 551, 'Mississippi': 351, 'MS': 201, 'Missouri': 501, 'MO': 1901, 'Montana': 251, 'MT': 401, 'Nebraska': 351, 'NE': 951, 'Nevada': 11751, 'NV': 1301, 'New Hampshire': 51, 'NH': 1051, 'New Jersey': 51, 'NJ': 1251, 'New Mexico': 51, 'NM': 1001, 'New York': 401, 'NY': 15701, 'North Carolina': 101, 'NC': 1451, 'North Dakota': 51, 'ND': 451, 'Ohio': 751, 'OH': 901, 'Oklahoma': 251, 'OK': 251, 'Oregon': 751, 'OR': 751, 'Pennsylvania': 451, 'PA': 501, 'Rhode Island': 51, 'RI': 551, 'South Carolina': 51, 'SC': 1351, 'South Dakota': 151, 'SD': 401, 'Tennessee': 551, 'TN': 801, 'Texas': 1951, 'TX': 2951, 'Utah': 551, 'UT': 1101, 'Vermont': 701, 'VT': 251, 'Virginia': 1701, 'VA': 1351, 'Washington': 801, 'WA': 2351, 'West Virginia': 51, 'WV': 501, 'Wisconsin': 351, 'WI': 851, 'Wyoming': 401, 'WY': 251}
 

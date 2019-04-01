@@ -41,13 +41,12 @@ def maximum_repos(location):
 """
 Goal: function that gets all the users for a specific state
 Function takes usrs_list and usrs as parameter and goes thorugh different 
-pages of users paginated list and adds named user to the usr_list set
+pages of users paginated list and adds named user to the usr_list
 return: usr_list
     
 """
 
-
-
+  
 def get_user_by_location(usrs_list, usrs):
     page_number = 0
     count = 0
@@ -66,9 +65,7 @@ def get_user_by_location(usrs_list, usrs):
     except Exception as e:
         print(str(e))
         return usrs_list
-    
-    
-    
+ 
     
 
 
@@ -160,25 +157,18 @@ print(maximum_repo_state)
 #pickleing the maximum_repo_state dictionary 
 with open('pickles/maximum_repo_state.pkl', 'wb') as f:
     pickle.dump(maximum_repo_state, f)
-'''  
-
-
+  
 
 
 #Reads the maximum_repo_state pickle
 with open('pickles/maximum_repo_state.pkl', 'rb') as f:
     maximum_repo_state  = pickle.load(f)
 
-print(maximum_repo_state)
-print(len(maximum_repo_state))
+'''
 
+#maximum_repo_state = {'Delaware': 251, 'Florida': 901, 'Georgia': 501, 'Hawaii': 201, 'Idaho': 401, 'Illinois': 501, 'Indiana': 251, 'Iowa': 451, 'Kansas': 401, 'Kentucky': 301, 'Louisiana': 1851, 'Maine': 551, 'Maryland': 501, 'Massachusetts': 1151, 'Michigan': 551, 'Minnesota': 1001, 'Mississippi': 351, 'Missouri': 501, 'Montana': 251, 'Nebraska': 351, 'Nevada': 11751, 'New Hampshire': 51, 'New Jersey': 51, 'New Mexico': 51, 'New York': 401, 'North Carolina': 101, 'North Dakota': 51, 'Ohio': 751, 'Oklahoma': 251, 'Oregon': 751, 'Pennsylvania': 451, 'Rhode Island': 51, 'South Carolina': 51, 'South Dakota': 151, 'Tennessee': 551, 'Texas': 1951, 'Utah': 551, 'Vermont': 701, 'Virginia': 1701, 'Washington': 801, 'West Virginia': 51, 'Wisconsin': 351, 'Wyoming': 401}
 
-
-#maximum_repo_state = {'Florida': 901, 'FL': 751, 'Georgia': 501, 'GA': 551, 'Hawaii': 201, 'HI': 301, 'Idaho': 401, 'ID': 251, 'Illinois': 501, 'IL': 1551, 'Indiana': 251, 'IN': 33601, 'Iowa': 451, 'IA': 501, 'Kansas': 401, 'KS': 1201, 'Kentucky': 301, 'KY': 401, 'Louisiana': 1851, 'LA': 20301, 'Maine': 551, 'ME': 251, 'Maryland': 501, 'MD': 1101, 'Massachusetts': 1151, 'MA': 1801, 'Michigan': 551, 'MI': 3951, 'Minnesota': 1001, 'MN': 551, 'Mississippi': 351, 'MS': 201, 'Missouri': 501, 'MO': 1901, 'Montana': 251, 'MT': 401, 'Nebraska': 351, 'NE': 951, 'Nevada': 11751, 'NV': 1301, 'New Hampshire': 51, 'NH': 1051, 'New Jersey': 51, 'NJ': 1251, 'New Mexico': 51, 'NM': 1001, 'New York': 401, 'NY': 15701, 'North Carolina': 101, 'NC': 1451, 'North Dakota': 51, 'ND': 451, 'Ohio': 751, 'OH': 901, 'Oklahoma': 251, 'OK': 251, 'Oregon': 751, 'OR': 751, 'Pennsylvania': 451, 'PA': 501, 'Rhode Island': 51, 'RI': 551, 'South Carolina': 51, 'SC': 1351, 'South Dakota': 151, 'SD': 401, 'Tennessee': 551, 'TN': 801, 'Texas': 1951, 'TX': 2951, 'Utah': 551, 'UT': 1101, 'Vermont': 701, 'VT': 251, 'Virginia': 1701, 'VA': 1351, 'Washington': 801, 'WA': 2351, 'West Virginia': 51, 'WV': 501, 'Wisconsin': 351, 'WI': 851, 'Wyoming': 401, 'WY': 251}
-
-
-#maximum_repo_state = {'Delaware': 251, 'DE': 20301}
-
+maximum_repo_state = {'Florida': 2 }
 
 
 #Gets users of all locations from the maximum_repo_state
@@ -188,11 +178,11 @@ Goes thorugh all the items in the maximum_repo_state dictionary.
 Uses key as a location and value as the maximum repo to iterate through.
 It searches users with specific repos (which increases by 1, and goes until maximum repo) and for a specific location(key)
 It uses get_user_by_location to get users for that location and specific repo number, and returns user_list
-At the end, it appends the location, users, number of users into the github_data_dict and pickles it
+At the end, it appends the location, users into the github_data_dict and pickles it
 
 """
-'''
 
+'''
 github_data_dict = {}
 
 for key, value in maximum_repo_state.items():
@@ -200,25 +190,48 @@ for key, value in maximum_repo_state.items():
     users_list = []
     repos = 1
     state = key
-    users =  client.search_users(query= 'repos:{} location:{}'.format(repos, state ))
+    year = 2007
+    more_than_1000 = False                                      
+    users =  client.search_users(query= 'repos:{} location:{}'.format(repos, state ))                        #gets all the users for a number of repos and location
     print("State {} & repos: {} & number of users {}".format(state, repos, users.totalCount))
-
+    
+    #As github only allow 1000 results per search, a condition to check if its users.totalCount == 1000
+    #if it is, then adds dates constraints to narrow the searches
+    if(users.totalCount == 1000):
+        users =  client.search_users(query= 'created:{}-01-01..{}-01-01 repos:{} location:{}'.format(year,(year+1), repos, state ))
+        print("State {} & repos: {} & from {} to {}  & number of users {}".format(state, repos, year, (year+1), users.totalCount))
+        more_than_1000 = True
+        
     while(repos <= value ):
         users_list = get_user_by_location(users_list, users)
         print("length of users_list", len(users_list))
         print("----------------------next--------------------------------")
+        if(more_than_1000 == True):
+            while(year < 2020):
+                year += 1
+                users =  client.search_users(query= 'created:{}-01-01..{}-01-01 repos:{} location:{}'.format(year,(year+1), repos, state ))
+                print("State {} & repos: {} & from {} to {}  & number of users {}".format(state, repos, year, (year+1), users.totalCount))
+                users_list = get_user_by_location(users_list, users)
+                print("length of users_list", len(users_list))
+                print("----------------------next--------------------------------")
+        
+        more_than_1000 = False
         repos += 1
         users =  client.search_users(query= 'repos:{} location:{}'.format(repos, state ))
         print("State {} & repos: {} & number of users {}".format(state, repos, users.totalCount))
+        
+        if(users.totalCount == 1000):
+            users =  client.search_users(query= 'created:{}-01-01..{}-01-01 repos:{} location:{}'.format(year,(year+1), repos, state ))
+            print("State {} & repos: {} & from {} to {}  & number of users {}".format(state, repos, year, (year+1), users.totalCount))
+            more_than_1000 = True
     
-    print(users_list)
-    
+    print(users_list)    
     github_data_dict[key] = users_list
     
-    
-#pickleing the maximum_repo_state dictionary 
-with open('pickles/{}.pkl'.format(key), 'wb') as f:
-    pickle.dump(github_data_dict, f)
+    #pickleing the maximum_repo_state dictionary 
+    print("--------------Now pickling-------------------------------------")
+    with open('pickles/users_pickles/{}.pkl'.format(key), 'wb') as f:
+        pickle.dump(github_data_dict, f)
 
 
 
@@ -230,15 +243,21 @@ with open('pickles/{}.pkl'.format(key), 'wb') as f:
 
 
 
-
-
-
-with open('pickles/users_pickles/alabama.pkl', 'rb') as f:
-    maximum_repo_state  = pickle.load(f)
-
-print(len(maximum_repo_state.get('AL')))
 
 '''
+
+with open('pickles/users_pickles/Florida.pkl', 'rb') as f:
+    maximum_repo_state  = pickle.load(f)  
+array = maximum_repo_state.get('Florida')      
+print(array)
+#import collections
+#print([item for item, count in collections.Counter(array).items() if count > 1])
+
+print(len(set(array)))
+
+
+
+
 
 
 

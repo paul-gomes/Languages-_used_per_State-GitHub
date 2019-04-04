@@ -16,7 +16,16 @@ access_token = f.read()
 #Creates github instance
 client = Github(access_token)
 
-def get_all_repos(repos, repo_list):
+
+"""
+Goal: function that gets all the repositories for a specific user.
+Function takes repo_list and repo as parameter and goes thorugh different 
+pages of repos paginated list and adds repos to the repo_list
+return: repo_list
+   
+"""
+
+def get_all_repos(repo_list, repos):
     page_number = 0
     count = 0
     total_repos = repos.totalCount
@@ -36,17 +45,19 @@ def get_all_repos(repos, repo_list):
         return repo_list
             
             
-
+#reads the state pickle and saves it to maximum_repo_state, which is a dictionary
 with open('pickles/users_pickles/Alabama.pkl', 'rb') as f:
     maximum_repo_state  = pickle.load(f) 
     
+#Gets users list for a specific state, which is a key of the dictionary
 users = maximum_repo_state.get('Alabama')
+
 users.reverse()   
 print(len(users))
 
 languages = {}
 
-f = open("checks_language_calculations/language_data.txt", "a")
+#f = open("checks_language_calculations/language_data.txt", "a")
 for user in users:
     print("user", user)
     repo_list = []
@@ -56,7 +67,7 @@ for user in users:
     for repo in repo_list:
         time.sleep(2)
         language = repo.get_languages()
-        f.write("{},".format(language))
+        #f.write("{},".format(language))
         print("language", language)
         for key, value in language.items():
             if key in languages:
@@ -70,14 +81,4 @@ for user in users:
     
     
     
-    
-'''
-print(users[1])
-repo_list = []
-repos = client.get_user(users[3].login).get_repos('all')
-repo_list = get_all_repos(repos, repo_list)
-print(repo_list)
-languages = repo_list[0].get_languages()
-print(languages)
-'''
 

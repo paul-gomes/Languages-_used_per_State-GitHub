@@ -8,8 +8,6 @@ Created on Mon Mar 11 21:27:58 2019
 from github import Github
 import time
 import pickle
-import requests
-from bs4 import BeautifulSoup
 
 #Reads access token from a file
 f = open("access_token.txt", "r")

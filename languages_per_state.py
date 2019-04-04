@@ -39,11 +39,13 @@ def get_all_repos(repos, repo_list):
 with open('pickles/users_pickles/Alabama.pkl', 'rb') as f:
     maximum_repo_state  = pickle.load(f) 
     
-users = maximum_repo_state.get('Alabama')   
+users = maximum_repo_state.get('Alabama')
+users.reverse()   
 print(len(users))
 
 languages = {}
 
+f = open("demofile2.txt", "a")
 for user in users:
     print("user", user)
     repo_list = []
@@ -52,6 +54,7 @@ for user in users:
     print("repo_list", repo_list)
     for repo in repo_list:
         language = repo.get_languages()
+        f.write(repo, "---", languages, "\n")
         print("language", language)
         for key, value in language.items():
             if key in languages:

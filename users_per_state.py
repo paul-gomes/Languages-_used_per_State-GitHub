@@ -165,7 +165,7 @@ with open('pickles/maximum_repo_state.pkl', 'rb') as f:
     maximum_repo_state  = pickle.load(f)
 
 '''
-maximum_repo_state = {'Arkansas': 3051, 'California': 4201, 'Colorado': 751, 'Connecticut': 751, 'Delaware': 251, 'Florida': 901, 'Georgia': 501, 'Hawaii': 201, 'Idaho': 401, 'Illinois': 501, 'Indiana': 251, 'Iowa': 451, 'Kansas': 401, 'Kentucky': 301, 'Louisiana': 1851, 'Maine': 551, 'Maryland': 501, 'Massachusetts': 1151, 'Michigan': 551, 'Minnesota': 1001, 'Mississippi': 351, 'Missouri': 501, 'Montana': 251, 'Nebraska': 351, 'Nevada': 11751, 'New Hampshire': 51, 'New Jersey': 51, 'New Mexico': 51, 'New York': 401, 'North Carolina': 101, 'North Dakota': 51, 'Ohio': 751, 'Oklahoma': 251, 'Oregon': 751, 'Pennsylvania': 451, 'Rhode Island': 51, 'South Carolina': 51, 'South Dakota': 151, 'Tennessee': 551, 'Texas': 1951, 'Utah': 551, 'Vermont': 701, 'Virginia': 1701, 'Washington': 801, 'West Virginia': 51, 'Wisconsin': 351, 'Wyoming': 401}
+maximum_repo_state = {'California': 4201, 'Colorado': 751, 'Connecticut': 751, 'Delaware': 251, 'Florida': 901, 'Georgia': 501, 'Hawaii': 201, 'Idaho': 401, 'Illinois': 501, 'Indiana': 251, 'Iowa': 451, 'Kansas': 401, 'Kentucky': 301, 'Louisiana': 1851, 'Maine': 551, 'Maryland': 501, 'Massachusetts': 1151, 'Michigan': 551, 'Minnesota': 1001, 'Mississippi': 351, 'Missouri': 501, 'Montana': 251, 'Nebraska': 351, 'Nevada': 11751, 'New Hampshire': 51, 'New Jersey': 51, 'New Mexico': 51, 'New York': 401, 'North Carolina': 101, 'North Dakota': 51, 'Ohio': 751, 'Oklahoma': 251, 'Oregon': 751, 'Pennsylvania': 451, 'Rhode Island': 51, 'South Carolina': 51, 'South Dakota': 151, 'Tennessee': 551, 'Texas': 1951, 'Utah': 551, 'Vermont': 701, 'Virginia': 1701, 'Washington': 801, 'West Virginia': 51, 'Wisconsin': 351, 'Wyoming': 401}
 
 
 #Gets users of all locations from the maximum_repo_state
@@ -213,6 +213,7 @@ for key, value in maximum_repo_state.items():
                 print("----------------------next--------------------------------")
         
         more_than_1000 = False
+        year = 2007
         repos += 1
         users =  client.search_users(query= 'repos:{} location:{}'.format(repos, state ))
         print("State {} & repos: {} & number of users {}".format(state, repos, users.totalCount))
@@ -243,16 +244,16 @@ for key, value in maximum_repo_state.items():
 
 
 '''
-with open('pickles/users_pickles/Alaska.pkl', 'rb') as f:
+with open('pickles/users_pickles/Arkansas.pkl', 'rb') as f:
     maximum_repo_state  = pickle.load(f)  
-array = maximum_repo_state.get('Alaska')      
+array = maximum_repo_state.get('Arkansas')      
 print(array)
 import collections
 print([item for item, count in collections.Counter(array).items() if count > 1])
 
 print(len(set(array)))
-
 '''
+
 
 
 

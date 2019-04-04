@@ -22,6 +22,7 @@ def get_all_repos(repos, repo_list):
     total_repos = repos.totalCount
     try:
         while(count <= total_repos):
+            time.sleep(6)
             repos_per_page = repos.get_page(page_number)
             if len(repos_per_page) == 0: return repo_list
             repo_list.extend(repos_per_page)
@@ -45,7 +46,7 @@ print(len(users))
 
 languages = {}
 
-f = open("demofile2.txt", "a")
+f = open("checks_language_calculations/language_data.txt", "a")
 for user in users:
     print("user", user)
     repo_list = []
@@ -53,8 +54,9 @@ for user in users:
     repo_list = get_all_repos(repos, repo_list)
     print("repo_list", repo_list)
     for repo in repo_list:
+        time.sleep(2)
         language = repo.get_languages()
-        f.write(repo, "---", languages, "\n")
+        f.write("{},".format(language))
         print("language", language)
         for key, value in language.items():
             if key in languages:

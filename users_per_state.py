@@ -178,7 +178,7 @@ It uses get_user_by_location to get users for that location and specific repo nu
 At the end, it appends the location, users into the github_data_dict and pickles it
 
 """
-'''
+
 
 github_data_dict = {}
 
@@ -253,7 +253,7 @@ print([item for item, count in collections.Counter(array).items() if count > 1])
 
 print(len(set(array)))
 
-
+'''
 
 
 

@@ -165,7 +165,7 @@ with open('pickles/maximum_repo_state.pkl', 'rb') as f:
     maximum_repo_state  = pickle.load(f)
 
 '''
-maximum_repo_state = {'Nevada': 200, 'New Hampshire': 51, 'New Jersey': 51, 'New Mexico': 51, 'New York': 401, 'North Carolina': 101, 'North Dakota': 51, 'Ohio': 751, 'Oklahoma': 251, 'Oregon': 751, 'Pennsylvania': 451, 'Rhode Island': 51, 'South Carolina': 51, 'South Dakota': 151, 'Tennessee': 551, 'Texas': 1951, 'Utah': 551, 'Vermont': 701, 'Virginia': 1701, 'Washington': 801, 'West Virginia': 51, 'Wisconsin': 351, 'Wyoming': 401}
+maximum_repo_state = {'Virginia': 1701, 'Washington': 801, 'West Virginia': 51, 'Wisconsin': 351, 'Wyoming': 401}
 
 
 #Gets users of all locations from the maximum_repo_state

@@ -47,40 +47,50 @@ def get_all_repos(repo_list, repos):
 
 states = ['Alabama', 'Alaska', 'Arizona', 'Arkansas', 'California', 'Colorado', 'Connecticut', 'Delaware', 'Florida', 'Georgia', 'Hawaii', 'Idaho', 'Illinois', 'Indiana', 'Iowa', 'Kansas', 'Kentucky', 'Louisiana', 'Maine', 'Maryland', 'Massachusetts', 'Michigan', 'Minnesota', 'Mississippi', 'Missouri', 'Montana', 'Nebraska', 'Nevada', 'New Hampshire', 'New Jersey', 'New Mexico', 'New York', 'North Carolina', 'North Dakota', 'Ohio', 'Oklahoma', 'Oregon', 'Pennsylvania', 'Rhode Island', 'South Carolina', 'South Dakota', 'Tennessee', 'Texas', 'Utah', 'Vermont', 'Virginia', 'Washington', 'West Virginia', 'Wisconsin', 'Wyoming']           
 
-#reads the state pickle and saves it to maximum_repo_state, which is a dictionary
-with open('pickles/users_pickles/Alabama.pkl', 'rb') as f:
-    maximum_repo_state  = pickle.load(f) 
-    
-#Gets users list for a specific state, which is a key of the dictionary
-users = maximum_repo_state.get('Alabama')
 
-users.reverse()   
-print(len(users))
-
-languages = {}
-
-#f = open("checks_language_calculations/language_data.txt", "a")
-for user in users:
-    print("user", user)
-    repo_list = []
-    repos = client.get_user(user.login).get_repos('all')
-    repo_list = get_all_repos(repos, repo_list)
-    print("repo_list", repo_list)
-    for repo in repo_list:
-        time.sleep(2)
-        language = repo.get_languages()
-        #f.write("{},".format(language))
-        print("language", language)
-        for key, value in language.items():
-            if key in languages:
-                languages[key] = languages.get(key) + value
-            else:
-                languages[key] = value
+for state in states:
+    #reads the state pickle and saves it to maximum_repo_state, which is a dictionary
+    with open('pickles/users_pickles/{}.pkl'.format(state), 'rb') as f:
+        maximum_repo_state  = pickle.load(f) 
         
-        print("Languages", languages)
+    #Gets users list for a specific state, which is a key of the dictionary
+    users = maximum_repo_state.get(state)  
+    print(len(users))
     
-  
+    languages = {}
     
+    #Used to write in text file and compare with the actual result. 
+    #The result seems to be good. Not using it do the calculations
+    #f = open("checks_language_calculations/language_data.txt", "a")
     
-    
+    for user in users:
+        print("user", user)
+        repo_list = []
+        repos = client.get_user(user.login).get_repos('all')
+        repo_list = get_all_repos(repo_list, repos)
+        print("repo_list", repo_list)
+        for repo in repo_list:
+            time.sleep(2)
+            language = repo.get_languages()
+            #f.write("{},".format(language))
+            print("language", language)
+            for key, value in language.items():
+                if key in languages:
+                    languages[key] = languages.get(key) + value
+                else:
+                    languages[key] = value
+            
+            print("Languages", languages)
+        
+    #pickleing the language dictionary for every state
+    print("--------------Now pickling-------------------------------------")
+    with open('pickles/languages_by_state_pickles/{}.pkl'.format(state), 'wb') as f:
+        pickle.dump(languages, f)
 
+            
+        
+      
+        
+        
+        
+    

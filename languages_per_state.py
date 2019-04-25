@@ -50,6 +50,7 @@ states = ['Alabama', 'Alaska', 'Arizona', 'Arkansas', 'California', 'Colorado', 
 
 for state in states:
     #reads the state pickle and saves it to maximum_repo_state, which is a dictionary
+    print("State:", state)
     with open('pickles/users_pickles/{}.pkl'.format(state), 'rb') as f:
         maximum_repo_state  = pickle.load(f) 
         
@@ -66,22 +67,24 @@ for state in states:
     for user in users:
         print("user", user)
         repo_list = []
-        repos = client.get_user(user.login).get_repos('all')
-        repo_list = get_all_repos(repo_list, repos)
-        print("repo_list", repo_list)
-        for repo in repo_list:
-            time.sleep(2)
-            language = repo.get_languages()
-            #f.write("{},".format(language))
-            print("language", language)
-            for key, value in language.items():
-                if key in languages:
-                    languages[key] = languages.get(key) + value
-                else:
-                    languages[key] = value
-            
-            print("Languages", languages)
-        
+        try:
+            repos = client.get_user(user.login).get_repos('public')
+            repo_list = get_all_repos(repo_list, repos)
+            print("repo_list", repo_list)
+            for repo in repo_list:
+                time.sleep(2)
+                language = repo.get_languages()
+                #f.write("{},".format(language))
+                print("language", language)
+                for key, value in language.items():
+                    if key in languages:
+                        languages[key] = languages.get(key) + value
+                    else:
+                        languages[key] = value
+                
+                print("Languages", languages)
+        except Exception as e:
+            print(str(e))
     #pickleing the language dictionary for every state
     print("--------------Now pickling-------------------------------------")
     with open('pickles/languages_by_state_pickles/{}.pkl'.format(state), 'wb') as f:
